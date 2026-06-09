@@ -4,10 +4,7 @@ pipeline {
     environment {
         TF_DIR = "terraform"
         ANSIBLE_DIR = "ansible"
-        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
-        AWS_DEFAULT_REGION    = 'us-east-1'
-}
+        AWS_DEFAULT_REGION = "us-east-1"
     }
 
     stages {
@@ -28,29 +25,29 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir("${TF_DIR}") {
-                    bat 'terraform init"'
+                    bat 'terraform init'
                 }
             }
         }
 
-       stage('Terraform Apply') {
+        stage('Terraform Apply') {
             steps {
-        withCredentials([
-            string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
-            string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
-        ]) {
-            dir("${TF_DIR}") {
-                bat 'terraform apply --auto-approve'
+                withCredentials([
+                    string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    dir("${TF_DIR}") {
+                        bat 'terraform apply --auto-approve'
+                    }
+                }
             }
         }
-    }
-}
 
         stage('Get Terraform Output') {
             steps {
                 script {
                     def ip = bat(
-                        script: "terraform -chdir=${TF_DIR} output -raw public_ip",
+                        script: "cd ${TF_DIR} && terraform output -raw public_ip",
                         returnStdout: true
                     ).trim()
 
