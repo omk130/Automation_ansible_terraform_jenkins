@@ -11,14 +11,14 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/omk130/Automation_ansible_terraform_jenkins'
+                    url: 'https://github.com/omk130/Automation_ansible_terraform_jenkins.git'
             }
         }
 
         stage('Terraform Init') {
             steps {
                 dir("${TF_DIR}") {
-                    bat 'wsl bash -lc "cd terraform && terraform init"'
+                    bat 'terraform init"'
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir("${TF_DIR}") {
-                    bat 'wsl terraform apply --auto-approve'
+                    bat 'terraform apply --auto-approve'
                 }
             }
         }
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     def ip = bat(
-                        script: "wsl terraform -chdir=${TF_DIR} output -raw public_ip",
+                        script: "terraform -chdir=${TF_DIR} output -raw public_ip",
                         returnStdout: true
                     ).trim()
 
