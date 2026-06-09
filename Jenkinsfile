@@ -18,7 +18,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir("${TF_DIR}") {
-                    bat 'terraform init'
+                    bat 'wsl terraform init'
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir("${TF_DIR}") {
-                    bat 'terraform apply --auto-approve'
+                    bat 'wsl terraform apply --auto-approve'
                 }
             }
         }
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     def ip = bat(
-                        script: "terraform -chdir=${TF_DIR} output -raw public_ip",
+                        script: "wsl terraform -chdir=${TF_DIR} output -raw public_ip",
                         returnStdout: true
                     ).trim()
 
