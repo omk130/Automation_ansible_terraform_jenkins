@@ -17,13 +17,17 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                bat 'wsl bash -lc "cd terraform && terraform init"'
+                dir("${TF_DIR}") {
+                    bat 'wsl bash -lc "cd terraform && terraform init"'
+                }
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                bat 'wsl bash -lc "cd terraform && terraform apply -auto-approve"'
+                dir("${TF_DIR}") {
+                    bat 'wsl terraform apply --auto-approve'
+                }
             }
         }
 
@@ -31,9 +35,9 @@ pipeline {
             steps {
                 script {
                     def ip = bat(
-                        script: 'wsl bash -lc "cd terraform && terraform output -raw public_ip"',
+                        script: "wsl terraform -chdir=${TF_DIR} output -raw public_ip",
                         returnStdout: true
-                    ).trim().split("\\r?\\n")[-1]
+                    ).trim()
 
                     env.SERVER_IP = ip
                     echo "Server IP: ${env.SERVER_IP}"
@@ -52,7 +56,7 @@ pipeline {
 
         stage('Run Ansible Playbook') {
             steps {
-                bat 'wsl bash -lc "cd ansible && ansible-playbook -i inventory.ini playbook.yml"'
+                bat "wsl ansible-playbook -i ansible/inventory.ini ansible/playbook.yml"
             }
         }
 
