@@ -67,7 +67,7 @@ pipeline{
         }
 
 
-        stage('Done'){
+        stage('Completed'){
             steps{
                 echo "Infrastructure deployed and configured successfully!"
             }
