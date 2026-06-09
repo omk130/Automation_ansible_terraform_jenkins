@@ -15,6 +15,12 @@ pipeline {
             }
         }
 
+        stage('Test Terraform') {
+            steps {
+                bat 'terraform -version'
+            }
+        }
+
         stage('Terraform Init') {
             steps {
                 dir("${TF_DIR}") {
