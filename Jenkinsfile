@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/YOUR_USERNAME/infra-automation.git'
+                    url: 'https://github.com/omk130/Automation_ansible_terraform_jenkins'
             }
         }
 
