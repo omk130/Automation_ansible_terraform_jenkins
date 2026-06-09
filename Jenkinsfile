@@ -59,10 +59,13 @@ pipeline {
 
         stage('Create Ansible Inventory') {
             steps {
-                bat """
-                echo [web] > ansible\\inventory.ini
-                echo ${env.SERVER_IP} ansible_user=ubuntu ansible_ssh_private_key_file=/home/omkar/.ssh/ansible-lab.pem >> ansible\\inventory.ini
-                """
+                script {
+                    def ip = env.SERVER_IP
+
+                    writeFile file: 'ansible/inventory.ini', text: """[web]
+${ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/omkar/.ssh/ansible-lab.pem
+"""
+                }
             }
         }
 
