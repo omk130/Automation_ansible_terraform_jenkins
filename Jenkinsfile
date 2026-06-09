@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         TF_DIR = "terraform"
-        ANSIBLE_DIR = "ansible"
         AWS_DEFAULT_REGION = "us-east-1"
     }
 
