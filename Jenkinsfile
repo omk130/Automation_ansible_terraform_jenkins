@@ -71,7 +71,7 @@ ${ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/omkar/.ssh/ansible-
 
         stage('Run Ansible Playbook') {
             steps {
-                bat "wsl ansible-playbook -i ansible/inventory.ini ansible/playbook.yml"
+                bat 'wsl.exe bash -lc "ansible-playbook -i ansible/inventory.ini ansible/playbook.yml"'
             }
         }
 
